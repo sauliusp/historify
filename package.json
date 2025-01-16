@@ -1,0 +1,35 @@
+{
+  "name": "browser-history-visualizer",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run clean && mkdir -p dist && cp manifest.json dist && cp -r icons dist && tsc src/background.ts src/contentScript.ts --outDir dist && parcel watch src/index.html --dist-dir dist --no-cache",
+    "build": "npm run clean && mkdir -p dist && cp manifest.json dist && cp -r icons dist && tsc src/background.ts src/contentScript.ts --outDir dist && parcel build src/index.html --dist-dir dist --no-cache",
+    "clean": "rm -rf dist .parcel-cache",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@parcel/transformer-typescript-tsc": "^2.13.3",
+    "@types/chrome": "^0.0.246",
+    "@types/d3": "^7.4.3",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.1",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "parcel": "^2.13.3",
+    "prettier": "^3.4.2",
+    "process": "^0.11.10",
+    "typescript": "^5.7.3"
+  }
+}
