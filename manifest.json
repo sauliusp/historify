@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Historify",
+  "version": "0.1.0",
+  "description": "Visualize your browsing history with interactive charts",
+  "permissions": ["history", "bookmarks", "storage", "activeTab", "scripting"],
+  "action": {
+    "default_title": "History Visualizer"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["index.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
