@@ -1,7 +1,14 @@
 /**
  * Content script for injecting the visualization overlay.
  */
-document.addEventListener('SHOW_HISTORY_VISUALIZER', () => {
+document.addEventListener('TOGGLE_OVERLAY', () => {
+  const existingIframe = document.getElementById('history-visualizer-overlay');
+
+  if (existingIframe) {
+    existingIframe.remove();
+    return;
+  }
+
   const iframe = document.createElement('iframe');
   iframe.id = 'history-visualizer-overlay';
   iframe.src = chrome.runtime.getURL('index.html');
@@ -19,11 +26,9 @@ document.addEventListener('SHOW_HISTORY_VISUALIZER', () => {
   document.body.appendChild(iframe);
 });
 
+// Add message event listener to handle iframe communication
 window.addEventListener('message', (event) => {
-  if (event.data === 'CLOSE_HISTORY_VISUALIZER') {
-    const iframe = document.getElementById('history-visualizer-overlay');
-    if (iframe) {
-      iframe.remove();
-    }
+  if (event.data.type === 'TOGGLE_OVERLAY') {
+    document.dispatchEvent(new CustomEvent('TOGGLE_OVERLAY'));
   }
 });
