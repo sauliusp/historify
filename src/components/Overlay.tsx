@@ -12,7 +12,8 @@ export const Overlay: React.FC = () => {
    * Handles closing the overlay.
    */
   const handleClose = () => {
-    window.parent.postMessage('CLOSE_HISTORY_VISUALIZER', '*');
+    // Send message that content script can intercept
+    window.parent.postMessage({type: 'TOGGLE_OVERLAY'}, '*');
   };
 
   return (
@@ -28,4 +29,4 @@ export const Overlay: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

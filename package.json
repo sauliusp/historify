@@ -2,8 +2,9 @@
   "name": "browser-history-visualizer",
   "version": "1.0.0",
   "scripts": {
-    "dev": "npm run clean && mkdir -p dist && cp manifest.json dist && cp -r icons dist && tsc src/background.ts src/contentScript.ts --outDir dist && parcel watch src/index.html --dist-dir dist --no-cache",
-    "build": "npm run clean && mkdir -p dist && cp manifest.json dist && cp -r icons dist && tsc src/background.ts src/contentScript.ts --outDir dist && parcel build src/index.html --dist-dir dist --no-cache",
+    "copy": "mkdir -p dist && cp manifest.json dist && cp -r icons dist && tsc src/background.ts src/contentScript.ts --outDir dist",
+    "dev": "npm run clean && npm run copy && parcel watch src/index.html --dist-dir dist --no-cache",
+    "build": "npm run clean && npm run copy && parcel build src/index.html --dist-dir dist --no-cache",
     "clean": "rm -rf dist .parcel-cache",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
