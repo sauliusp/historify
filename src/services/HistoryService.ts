@@ -23,6 +23,19 @@ class HistoryService {
   }
 
   /**
+   * Gets visit count for a URL within a specific timeframe
+   */
+  private async getVisitsInTimeframe(
+    url: string,
+    startTime: number,
+  ): Promise<number> {
+    const visits = await chrome.history.getVisits({url});
+    return visits.filter(
+      (visit) => visit.visitTime && visit.visitTime >= startTime,
+    ).length;
+  }
+
+  /**
    * Retrieves browser history for the specified timeframe.
    * @param {TimeFrame} timeframe The timeframe to fetch history for.
    * @return {Promise<HistoryItem[]>} Promise resolving to history items.
@@ -30,25 +43,34 @@ class HistoryService {
   public async getHistory(timeframe: TimeFrame): Promise<HistoryItem[]> {
     const startTime = this.getStartTime(timeframe);
 
-    return new Promise((resolve) => {
-      chrome.history.search(
-        {
-          text: '',
-          startTime,
-          maxResults: 10000,
-        },
-        (historyItems) => {
-          resolve(
-            historyItems.map((item) => ({
-              url: item.url!,
-              title: item.title!,
-              visitCount: item.visitCount!,
-              lastVisitTime: item.lastVisitTime!,
-            })),
-          );
-        },
-      );
+    const historyItems = await chrome.history.search({
+      text: '',
+      startTime,
+      maxResults: 10000,
     });
+
+    // Process each history item to include timeframe-specific visit count
+    const processedItems = await Promise.all(
+      historyItems.map(async (item) => {
+        if (!item.url) return null;
+
+        const timeframeVisits = await this.getVisitsInTimeframe(
+          item.url,
+          startTime,
+        );
+
+        return {
+          ...item,
+          timeframeVisits,
+          url: item.url,
+          title: item.title || '',
+          visitCount: item.visitCount || 0,
+          lastVisitTime: item.lastVisitTime || 0,
+        } as HistoryItem;
+      }),
+    );
+
+    return processedItems.filter((item): item is HistoryItem => item !== null);
   }
 
   /**

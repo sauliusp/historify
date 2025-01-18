@@ -57,12 +57,12 @@ class BookmarkSuggestionService {
     const existingBookmarks = await this.getExistingBookmarks();
 
     return historyItems
-      .sort((a, b) => b.visitCount - a.visitCount)
+      .sort((a, b) => b.timeframeVisits - a.timeframeVisits)
       .slice(0, 10)
       .map((item) => ({
         url: item.url,
         title: item.title,
-        visitCount: item.visitCount,
+        timeframeVisits: item.timeframeVisits,
         isBookmarked: existingBookmarks.includes(item.url),
       }));
   }
