@@ -33,6 +33,7 @@ export const Dashboard: React.FC = () => {
   const handleHistoryItems = async (timeframe: TimeFrame) => {
     setTimeframe(timeframe);
     const historyItems = await historyService.getHistory(timeframe);
+    debugger;
     const bookmarkSuggestions =
       await bookmarkSuggestionService.getSuggestions(historyItems);
     setHistory(historyItems);
@@ -104,7 +105,7 @@ export const Dashboard: React.FC = () => {
                 {new URL(suggestion.url).hostname}
               </a>
               <span className="visit-count">
-                {suggestion.visitCount} visits
+                {suggestion.timeframeVisits} visits in this period
               </span>
               <button
                 onClick={() => handleBookmark(suggestion)}

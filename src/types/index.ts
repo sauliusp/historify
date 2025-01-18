@@ -4,13 +4,10 @@
 export type TimeFrame = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly';
 
 /**
- * Represents a browser history item.
+ * Extends chrome.history.HistoryItem with additional properties
  */
-export interface HistoryItem {
-  url: string;
-  title: string;
-  visitCount: number;
-  lastVisitTime: number;
+export interface HistoryItem extends chrome.history.HistoryItem {
+  timeframeVisits: number;
 }
 
 /**
@@ -19,7 +16,7 @@ export interface HistoryItem {
 export interface BookmarkSuggestion {
   url: string;
   title: string;
-  visitCount: number;
+  timeframeVisits: number;
   isBookmarked: boolean;
 }
 
