@@ -1,7 +1,7 @@
 /**
  * Service for managing browser history operations.
  */
-import {TimeFrame, HistoryItem} from '../types';
+import {TimeFrame, HistoryItem, TimeframeOption} from '../types';
 
 class HistoryService {
   private static instance: HistoryService;
@@ -37,15 +37,24 @@ class HistoryService {
 
   /**
    * Retrieves browser history for the specified timeframe.
-   * @param {TimeFrame} timeframe The timeframe to fetch history for.
-   * @return {Promise<HistoryItem[]>} Promise resolving to history items.
    */
-  public async getHistory(timeframe: TimeFrame): Promise<HistoryItem[]> {
-    const startTime = this.getStartTime(timeframe);
+  public async getHistory(
+    timeframeOption: TimeframeOption,
+  ): Promise<HistoryItem[]> {
+    const startTime =
+      timeframeOption.type === 'custom' && timeframeOption.dateRange?.startDate
+        ? timeframeOption.dateRange.startDate.getTime()
+        : this.getStartTime(timeframeOption.type as TimeFrame);
+
+    const endTime =
+      timeframeOption.type === 'custom' && timeframeOption.dateRange?.endDate
+        ? timeframeOption.dateRange.endDate.getTime()
+        : Date.now();
 
     const historyItems = await chrome.history.search({
       text: '',
       startTime,
+      endTime,
       maxResults: 10000,
     });
 
