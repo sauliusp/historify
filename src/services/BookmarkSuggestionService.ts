@@ -3,7 +3,7 @@
  */
 import {HistoryItem, BookmarkSuggestion} from '../types';
 
-export class BookmarkSuggestionService {
+class BookmarkSuggestionService {
   private static instance: BookmarkSuggestionService;
 
   /**
@@ -31,7 +31,7 @@ export class BookmarkSuggestionService {
     historyItems: HistoryItem[],
   ): Promise<BookmarkSuggestion[]> {
     const existingBookmarks = await this.getExistingBookmarks();
-    
+
     return historyItems
       .filter((item) => !existingBookmarks.includes(item.url))
       .sort((a, b) => b.visitCount - a.visitCount)
@@ -60,4 +60,7 @@ export class BookmarkSuggestionService {
       });
     });
   }
-} 
+}
+
+export const bookmarkSuggestionService =
+  BookmarkSuggestionService.getInstance();
