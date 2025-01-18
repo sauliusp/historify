@@ -79,9 +79,9 @@ export const HierarchyVisualization: React.FC<HierarchyVisualizationProps> = ({
     });
 
     const color = d3
-      .scaleLinear()
+      .scaleLinear<string>()
       .domain([0, 5])
-      .range(['hsl(190,80%,80%)', 'hsl(228,30%,40%)'] as any)
+      .range(['hsl(152,80%,80%)', 'hsl(228,30%,40%)'])
       .interpolate(d3.interpolateHcl);
 
     const pack = (data: any) =>
@@ -104,7 +104,7 @@ export const HierarchyVisualization: React.FC<HierarchyVisualizationProps> = ({
       )
       .style('display', 'block')
       .style('margin', '0 -14px')
-      .style('background', color(0))
+      .style('background', 'white')
       .style('cursor', 'pointer')
       .on('click', (event) => zoom(event, root));
 

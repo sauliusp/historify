@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 2rem;
   margin: 0 auto;
+  background-color: #f7f5f2;
 }
 
 .controls {
@@ -20,28 +21,24 @@
 
 .timeframe-selector label {
   font-weight: 500;
-  color: #333;
+  color: #1b1b1b;
 }
 
 .timeframe-selector select {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
   border-radius: 4px;
   background-color: white;
   font-size: 1rem;
-  color: #333;
+  color: #565656;
   cursor: pointer;
   transition: border-color 0.2s ease;
 }
 
-.timeframe-selector select:hover {
-  border-color: #2196f3;
-}
-
+.timeframe-selector select:hover,
 .timeframe-selector select:focus {
-  outline: none;
-  border-color: #2196f3;
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+  border-color: #f9a03c;
+  box-shadow: 0 0 0 2px rgba(249, 160, 60, 0.1);
 }
 
 .visualizations-grid {
@@ -54,13 +51,13 @@
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(27, 27, 27, 0.1);
 }
 
 .visualization-card h2 {
   margin: 0 0 1.5rem 0;
   font-size: 1.25rem;
-  color: #333;
+  color: #1b1b1b;
   font-weight: 500;
 }
 
@@ -79,7 +76,7 @@
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(27, 27, 27, 0.1);
 }
 
 .suggestions-panel h2 {
@@ -96,7 +93,8 @@
 }
 
 .suggestion-card {
-  background: #f8f9fa;
+  background: #f7f5f2;
+  border: 1px solid #e0e0e0;
   border-radius: 6px;
   padding: 1rem;
   display: flex;
@@ -109,13 +107,13 @@
 
 .suggestion-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(27, 27, 27, 0.1);
 }
 
 .suggestion-card h3 {
   margin: 0;
   font-size: 1rem;
-  color: #333;
+  color: #1b1b1b;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -123,14 +121,14 @@
 }
 
 .suggestion-card a {
-  color: #2196f3;
+  color: #f9a03c;
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.2s ease;
 }
 
 .suggestion-card a:hover {
-  color: #1976d2;
+  color: #e88f2c;
 }
 
 .suggestion-card .visit-count {
@@ -140,7 +138,7 @@
 
 /* D3 Visualization Styles */
 .grid line {
-  stroke: #ddd;
+  stroke: #e0e0e0;
 }
 
 .grid path {
@@ -149,15 +147,15 @@
 
 .axis text {
   font-size: 12px;
-  color: #666;
+  color: #565656;
 }
 
 .axis line {
-  stroke: #ddd;
+  stroke: #e0e0e0;
 }
 
 .axis path {
-  stroke: #ddd;
+  stroke: #e0e0e0;
 }
 
 /* Responsive Adjustments */
@@ -203,4 +201,243 @@
   max-width: 100%;
   height: auto;
   border-radius: 8px;
+}
+
+/* D3 Chart Specific Styles */
+.visualization-container svg {
+  background-color: #f7f5f2;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Bar Chart */
+.bar {
+  fill: #f9a03c;
+  transition: fill 0.2s ease;
+}
+
+.bar:hover {
+  fill: #e88f2c;
+}
+
+/* Line Chart */
+.line {
+  fill: none;
+  stroke: #f9a03c;
+  stroke-width: 2;
+}
+
+.line-point {
+  fill: #f9a03c;
+  stroke: white;
+  stroke-width: 2;
+}
+
+.line-point:hover {
+  fill: #e88f2c;
+  r: 6;
+}
+
+/* Area Chart */
+.area {
+  fill: rgba(249, 160, 60, 0.1);
+  stroke: #f9a03c;
+  stroke-width: 2;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  padding: 8px;
+  background: #1b1b1b;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Axes and Grid */
+.grid line {
+  stroke: #e0e0e0;
+  stroke-dasharray: 2, 2;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+.axis text {
+  font-size: 12px;
+  fill: #565656;
+}
+
+.axis line {
+  stroke: #e0e0e0;
+}
+
+.axis path {
+  stroke: #e0e0e0;
+}
+
+/* Legend */
+.legend text {
+  font-size: 12px;
+  fill: #565656;
+}
+
+.legend-item:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Brush Selection */
+.brush .selection {
+  fill: rgba(249, 160, 60, 0.1);
+  stroke: #f9a03c;
+}
+
+/* D3 Base Container */
+.visualization-container svg {
+  background-color: #f7f5f2;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Domain Visualization (Bar Chart) */
+#bar-gradient stop[offset='0%'] {
+  stop-color: #f9a03c;
+  stop-opacity: 0.6;
+}
+
+#bar-gradient stop[offset='100%'] {
+  stop-color: #f9a03c;
+  stop-opacity: 0.9;
+}
+
+rect.bar {
+  transition: fill 0.2s ease;
+}
+
+rect.bar:hover {
+  fill: #e88f2c;
+}
+
+/* History Visualization (Area/Line Chart) */
+#area-gradient stop[offset='0%'] {
+  stop-color: #f9a03c;
+  stop-opacity: 0.1;
+}
+
+#area-gradient stop[offset='100%'] {
+  stop-color: #f9a03c;
+  stop-opacity: 0.4;
+}
+
+path[stroke='#2196f3'] {
+  stroke: #f9a03c;
+}
+
+/* Hierarchy Visualization (Circle Pack) */
+circle {
+  transition: all 0.2s ease;
+}
+
+circle[fill='white'] {
+  fill: #f7f5f2;
+}
+
+circle:hover {
+  stroke: #1b1b1b;
+  stroke-width: 1.5px;
+}
+
+/* Common D3 Elements */
+.grid line {
+  stroke: #e0e0e0;
+  stroke-opacity: 0.1;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+.domain {
+  stroke: #e0e0e0;
+}
+
+.tick text {
+  fill: #565656;
+  font-size: 12px;
+}
+
+.tick line {
+  stroke: #e0e0e0;
+}
+
+/* Text Elements */
+text {
+  fill: #565656;
+}
+
+/* Tooltip */
+.d3-tooltip {
+  background: #1b1b1b;
+  color: white;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 12px;
+}
+
+/* Override any inline styles for circle pack */
+g[style*='font'] {
+  font: 10px sans-serif !important;
+  fill: #565656 !important;
+}
+
+/* Ensure SVG background is consistent */
+svg[style*='background'] {
+  background: #f7f5f2 !important;
+}
+
+/* Circle Pack (Hierarchy Visualization) - More specific selectors */
+circle[fill-opacity='1'] {
+  fill: #f9a03c;
+}
+
+circle[fill-opacity='0.7'] {
+  fill: white;
+  stroke: #f9a03c;
+  stroke-width: 1px;
+}
+
+/* Target circles based on their depth using fill attribute */
+circle[fill^='hsl(152'] {
+  fill: #fcd4a7;
+}
+
+circle[fill^='hsl(228'] {
+  fill: #f9a03c;
+}
+
+/* Circle interactions */
+circle {
+  transition: all 0.2s ease;
+}
+
+circle:hover {
+  stroke: #1b1b1b;
+  stroke-width: 1.5px;
+}
+
+/* Circle Pack text labels */
+g[pointer-events='none'] text {
+  fill: #565656;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Circle Pack container specific background */
+.visualization-container svg[style*='margin: 0px -14px'] {
+  background: #f7f5f2 !important;
 }
