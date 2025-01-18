@@ -441,3 +441,50 @@ g[pointer-events='none'] text {
 .visualization-container svg[style*='margin: 0px -14px'] {
   background: #f7f5f2 !important;
 }
+
+/* Circle Pack text interactions */
+g[text-anchor='middle'] text {
+  fill: #565656;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: fill 0.2s ease;
+}
+
+g[text-anchor='middle'] text[style*='cursor: pointer']:hover {
+  fill: #f9a03c;
+  text-decoration: underline;
+}
+
+/* Keep existing Circle Pack styles */
+circle[fill-opacity='1'] {
+  fill: #f9a03c;
+}
+
+circle[fill-opacity='0.7'] {
+  fill: white;
+  stroke: #f9a03c;
+  stroke-width: 1px;
+}
+
+/* Target circles based on their depth using fill attribute */
+circle[fill^='hsl(152'] {
+  fill: #fcd4a7;
+}
+
+circle[fill^='hsl(228'] {
+  fill: #f9a03c;
+}
+
+/* Circle interactions */
+circle {
+  transition: all 0.2s ease;
+}
+
+circle:hover {
+  stroke: #1b1b1b;
+  stroke-width: 1.5px;
+}
+
+/* Circle Pack container specific background */
+.visualization-container svg[style*='margin: 0px -14px'] {
+  background: #f7f5f2 !important;
+}

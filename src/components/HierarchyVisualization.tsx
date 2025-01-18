@@ -130,14 +130,21 @@ export const HierarchyVisualization: React.FC<HierarchyVisualizationProps> = ({
     const label = svg
       .append('g')
       .style('font', '10px sans-serif')
-      .attr('pointer-events', 'none')
+      .attr('pointer-events', 'all')
       .attr('text-anchor', 'middle')
       .selectAll('text')
       .data(root.descendants())
       .join('text')
       .style('fill-opacity', (d) => (d.parent === root ? 1 : 0))
       .style('display', (d) => (d.parent === root ? 'inline' : 'none'))
-      .text((d) => d.data.name);
+      .text((d) => d.data.name)
+      .style('cursor', (d) => (d.data.url ? 'pointer' : 'default'))
+      .on('click', (event, d) => {
+        event.stopPropagation();
+        if (d.data.url) {
+          window.open(d.data.url, '_blank');
+        }
+      });
 
     function zoomTo(v: [number, number, number]) {
       const k = dimensions.width / v[2];
