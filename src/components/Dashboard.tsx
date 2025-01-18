@@ -4,15 +4,29 @@
 import React, {useEffect, useState} from 'react';
 import {HistoryVisualization} from './HistoryVisualization';
 import {DomainVisualization} from './DomainVisualization';
-import {TimeFrame, HistoryItem, BookmarkSuggestion} from '../types';
+import {
+  TimeFrame,
+  HistoryItem,
+  BookmarkSuggestion,
+  TimeframeOption,
+  DateRange,
+} from '../types';
 import {historyService} from 'services/HistoryService';
 import {bookmarkSuggestionService} from 'services/BookmarkSuggestionService';
+import {CustomDateRangePicker} from './DateRangePicker';
+import {HierarchyVisualization} from './HierarchyVisualization';
 
 /**
  * Main dashboard component for the history visualizer.
  */
 export const Dashboard: React.FC = () => {
-  const [timeframe, setTimeframe] = useState<TimeFrame>('daily');
+  const [timeframeOption, setTimeframeOption] = useState<TimeframeOption>({
+    type: 'daily',
+  });
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: null,
+    endDate: null,
+  });
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [suggestions, setSuggestions] = useState<BookmarkSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,19 +35,18 @@ export const Dashboard: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await handleHistoryItems(timeframe);
+        await handleHistoryItems(timeframeOption);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [timeframe]);
+  }, [timeframeOption]);
 
-  const handleHistoryItems = async (timeframe: TimeFrame) => {
-    setTimeframe(timeframe);
-    const historyItems = await historyService.getHistory(timeframe);
-    debugger;
+  const handleHistoryItems = async (timeframeOption: TimeframeOption) => {
+    setTimeframeOption(timeframeOption);
+    const historyItems = await historyService.getHistory(timeframeOption);
     const bookmarkSuggestions =
       await bookmarkSuggestionService.getSuggestions(historyItems);
     setHistory(historyItems);
@@ -53,6 +66,31 @@ export const Dashboard: React.FC = () => {
     }
   };
 
+  const handleTimeframeChange = (value: TimeFrame | 'custom') => {
+    if (value === 'custom') {
+      setTimeframeOption({
+        type: 'custom',
+        dateRange,
+      });
+    } else {
+      setTimeframeOption({type: value});
+      setDateRange({startDate: null, endDate: null});
+    }
+  };
+
+  const handleDateRangeChange = (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+    const newDateRange = {startDate: start, endDate: end};
+    setDateRange(newDateRange);
+
+    if (start && end) {
+      setTimeframeOption({
+        type: 'custom',
+        dateRange: newDateRange,
+      });
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -64,15 +102,25 @@ export const Dashboard: React.FC = () => {
           <label htmlFor="timeframe">Time Range:</label>
           <select
             id="timeframe"
-            value={timeframe}
-            onChange={(e) => handleHistoryItems(e.target.value as TimeFrame)}
+            value={timeframeOption.type}
+            onChange={(e) =>
+              handleTimeframeChange(e.target.value as TimeFrame | 'custom')
+            }
           >
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>
             <option value="monthly">Monthly</option>
             <option value="quarterly">Quarterly</option>
             <option value="yearly">Yearly</option>
+            <option value="custom">Custom Range</option>
           </select>
+
+          {timeframeOption.type === 'custom' && (
+            <CustomDateRangePicker
+              dateRange={dateRange}
+              onDateRangeChange={handleDateRangeChange}
+            />
+          )}
         </div>
       </div>
 
@@ -85,6 +133,11 @@ export const Dashboard: React.FC = () => {
         <div className="visualization-card">
           <h2>Top Visited Domains</h2>
           <DomainVisualization data={history} />
+        </div>
+
+        <div className="visualization-card">
+          <h2>Domain Hierarchy</h2>
+          <HierarchyVisualization data={history} />
         </div>
       </div>
 

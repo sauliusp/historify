@@ -63,8 +63,8 @@ class BookmarkSuggestionService {
         url: item.url,
         title: item.title,
         timeframeVisits: item.timeframeVisits,
-        isBookmarked: existingBookmarks.includes(item.url),
-      }));
+        isBookmarked: existingBookmarks.includes(item.url!),
+      })) as BookmarkSuggestion[];
   }
 
   /**
