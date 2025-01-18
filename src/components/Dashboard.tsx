@@ -2,11 +2,11 @@
  * Dashboard component containing all visualizations.
  */
 import React, {useEffect, useState} from 'react';
-import {HistoryService} from '../services/HistoryService';
-import {BookmarkSuggestionService} from '../services/BookmarkSuggestionService';
 import {HistoryVisualization} from './HistoryVisualization';
 import {DomainVisualization} from './DomainVisualization';
 import {TimeFrame, HistoryItem, BookmarkSuggestion} from '../types';
+import {historyService} from 'services/HistoryService';
+import {bookmarkSuggestionService} from 'services/BookmarkSuggestionService';
 
 /**
  * Main dashboard component for the history visualizer.
@@ -21,15 +21,7 @@ export const Dashboard: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const historyService = HistoryService.getInstance();
-        const bookmarkService = BookmarkSuggestionService.getInstance();
-
-        const historyItems = await historyService.getHistory(timeframe);
-        setHistory(historyItems);
-
-        const bookmarkSuggestions =
-          await bookmarkService.getSuggestions(historyItems);
-        setSuggestions(bookmarkSuggestions);
+        await handleHistoryItems(timeframe);
       } finally {
         setLoading(false);
       }
@@ -37,6 +29,15 @@ export const Dashboard: React.FC = () => {
 
     fetchData();
   }, [timeframe]);
+
+  const handleHistoryItems = async (timeframe: TimeFrame) => {
+    setTimeframe(timeframe);
+    const historyItems = await historyService.getHistory(timeframe);
+    const bookmarkSuggestions =
+      await bookmarkSuggestionService.getSuggestions(historyItems);
+    setHistory(historyItems);
+    setSuggestions(bookmarkSuggestions);
+  };
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -50,7 +51,7 @@ export const Dashboard: React.FC = () => {
           <select
             id="timeframe"
             value={timeframe}
-            onChange={(e) => setTimeframe(e.target.value as TimeFrame)}
+            onChange={(e) => handleHistoryItems(e.target.value as TimeFrame)}
           >
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>

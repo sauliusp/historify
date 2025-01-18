@@ -3,7 +3,7 @@
  */
 import {TimeFrame, HistoryItem} from '../types';
 
-export class HistoryService {
+class HistoryService {
   private static instance: HistoryService;
 
   /**
@@ -29,20 +29,25 @@ export class HistoryService {
    */
   public async getHistory(timeframe: TimeFrame): Promise<HistoryItem[]> {
     const startTime = this.getStartTime(timeframe);
-    
+
     return new Promise((resolve) => {
-      chrome.history.search({
-        text: '',
-        startTime,
-        maxResults: 1000,
-      }, (historyItems) => {
-        resolve(historyItems.map((item) => ({
-          url: item.url!,
-          title: item.title!,
-          visitCount: item.visitCount!,
-          lastVisitTime: item.lastVisitTime!,
-        })));
-      });
+      chrome.history.search(
+        {
+          text: '',
+          startTime,
+          maxResults: 10000,
+        },
+        (historyItems) => {
+          resolve(
+            historyItems.map((item) => ({
+              url: item.url!,
+              title: item.title!,
+              visitCount: item.visitCount!,
+              lastVisitTime: item.lastVisitTime!,
+            })),
+          );
+        },
+      );
     });
   }
 
@@ -68,4 +73,6 @@ export class HistoryService {
         return now.setHours(0, 0, 0, 0);
     }
   }
-} 
+}
+
+export const historyService = HistoryService.getInstance();
