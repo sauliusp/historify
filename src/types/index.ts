@@ -20,6 +20,7 @@ export interface BookmarkSuggestion {
   url: string;
   title: string;
   visitCount: number;
+  isBookmarked: boolean;
 }
 
 /**
@@ -28,4 +29,4 @@ export interface BookmarkSuggestion {
 export interface Dimensions {
   width: number;
   height: number;
-} 
+}

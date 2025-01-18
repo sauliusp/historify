@@ -3,6 +3,11 @@
  */
 import {HistoryItem, BookmarkSuggestion} from '../types';
 
+interface BookmarkStatus {
+  url: string;
+  isBookmarked: boolean;
+}
+
 class BookmarkSuggestionService {
   private static instance: BookmarkSuggestionService;
 
@@ -23,6 +28,25 @@ class BookmarkSuggestionService {
   }
 
   /**
+   * Creates a new bookmark
+   * @param {string} url URL to bookmark
+   * @param {string} title Title for the bookmark
+   * @return {Promise<void>}
+   */
+  public async createBookmark(url: string, title: string): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.bookmarks.create(
+        {
+          parentId: '1',
+          url,
+          title,
+        },
+        () => resolve(),
+      );
+    });
+  }
+
+  /**
    * Generates bookmark suggestions based on browsing history.
    * @param {HistoryItem[]} historyItems Array of history items.
    * @return {Promise<BookmarkSuggestion[]>} Promise resolving to suggestions.
@@ -33,13 +57,13 @@ class BookmarkSuggestionService {
     const existingBookmarks = await this.getExistingBookmarks();
 
     return historyItems
-      .filter((item) => !existingBookmarks.includes(item.url))
       .sort((a, b) => b.visitCount - a.visitCount)
-      .slice(0, 5)
+      .slice(0, 10)
       .map((item) => ({
         url: item.url,
         title: item.title,
         visitCount: item.visitCount,
+        isBookmarked: existingBookmarks.includes(item.url),
       }));
   }
 
