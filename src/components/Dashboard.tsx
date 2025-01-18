@@ -39,6 +39,19 @@ export const Dashboard: React.FC = () => {
     setSuggestions(bookmarkSuggestions);
   };
 
+  const handleBookmark = async (suggestion: BookmarkSuggestion) => {
+    if (!suggestion.isBookmarked) {
+      await bookmarkSuggestionService.createBookmark(
+        suggestion.url,
+        suggestion.title,
+      );
+      // Refresh suggestions after bookmarking
+      const newSuggestions =
+        await bookmarkSuggestionService.getSuggestions(history);
+      setSuggestions(newSuggestions);
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -78,7 +91,10 @@ export const Dashboard: React.FC = () => {
         <h2>Recommended Bookmarks</h2>
         <div className="suggestions-grid">
           {suggestions.map((suggestion, index) => (
-            <div key={index} className="suggestion-card">
+            <div
+              key={index}
+              className={`suggestion-card ${suggestion.isBookmarked ? 'bookmarked' : ''}`}
+            >
               <h3>{suggestion.title}</h3>
               <a
                 href={suggestion.url}
@@ -90,6 +106,13 @@ export const Dashboard: React.FC = () => {
               <span className="visit-count">
                 {suggestion.visitCount} visits
               </span>
+              <button
+                onClick={() => handleBookmark(suggestion)}
+                className="bookmark-button"
+                disabled={suggestion.isBookmarked}
+              >
+                {suggestion.isBookmarked ? 'Bookmarked' : 'Add Bookmark'}
+              </button>
             </div>
           ))}
         </div>
